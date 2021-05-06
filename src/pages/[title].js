@@ -19,6 +19,7 @@ import ContentView from '../components/Content/View';
 import Layout from '../components/Layout';
 import PrintHead from '../components/PrintHead';
 import SocialLinks from '../components/SocialLinks';
+import AlertInfo from '../components/AlertInfo';
 
 function Content({ content, source, title }) {
     const isMobile = useMediaQuery('(max-width:600px)');
@@ -83,6 +84,8 @@ function Content({ content, source, title }) {
                         <Grid item sm={9} style={{ width: '100%' }}>
                             <Fade in>
                                 <Box padding={isMobile ? '0rem' : '1rem'}>
+                                    {process.env.IS_COURSE_COMPLETED === 'false' && <AlertInfo />}
+
                                     <div ref={componentRef}>
                                         {isPrint && <PrintHead />}
                                         <ContentView content={content} source={source} />
