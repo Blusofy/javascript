@@ -6,7 +6,7 @@ import {
     Grid,
     Paper,
     Typography,
-    useMediaQuery,
+    useMediaQuery
 } from '@material-ui/core';
 import { Edit as EditIcon, Print as PrintIcon, YouTube as YouTubeIcon } from '@material-ui/icons';
 import { Base64 } from 'js-base64';
@@ -14,12 +14,12 @@ import Head from 'next/head';
 import { useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import printStyle from '../../styles/print.module.css';
+import AlertInfo from '../components/AlertInfo';
 import ContentList from '../components/Content/List';
 import ContentView from '../components/Content/View';
 import Layout from '../components/Layout';
 import PrintHead from '../components/PrintHead';
 import SocialLinks from '../components/SocialLinks';
-import AlertInfo from '../components/AlertInfo';
 
 function Content({ content, source, title }) {
     const isMobile = useMediaQuery('(max-width:600px)');
@@ -146,14 +146,20 @@ function Content({ content, source, title }) {
         </>
     );
 }
+// Encoding URI
+function encodeUri(str) {
+    return encodeURI(str).replace(/%5B/g, '[').replace(/%5D/g, ']');
+}
 // Get Static Props For SSG
 export async function getStaticProps(ctx) {
     const { title } = ctx.params;
     const res = await fetch(
-        `${process.env.GITHUB_CONTENT_API_URI}${process.env.ROOT_PAGE}/${`${title.replace(
-            /-/g,
-            ' '
-        )}.md`}`,
+        encodeUri(
+            `${process.env.GITHUB_CONTENT_API_URI}${process.env.ROOT_PAGE}/${`${title.replace(
+                /-/g,
+                ' '
+            )}.md`}`
+        ),
         {
             headers: {
                 Authorization: process.env.GITHUB_AUTH_API_TOKEN,
